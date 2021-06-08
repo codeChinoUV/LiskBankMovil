@@ -9,13 +9,14 @@
  */
 
 import React from 'react';
-import {Text, View} from 'react-native';
+import {SafeAreaView, Text} from 'react-native';
+import {LoginScreen} from "./src/screens/LoginScreen";
 
 const App = () => {
   return (
-    <View>
-      <Text>Hola Mundo</Text>
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <LoginScreen />
+    </SafeAreaView>
   );
 };
 
