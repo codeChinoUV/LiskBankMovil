@@ -1,23 +1,61 @@
-import React from 'react';
-import {Image, StyleSheet, Text, TextInput, View} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Image,
+  Keyboard,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  ScrollView,
+} from 'react-native';
+import EncryptedStorage from 'react-native-encrypted-storage';
 import {generalStyles} from '../styles/generalStyles';
 import {Button} from '../components/UI/Button';
 import {useForm} from '../hooks/useForm';
+import {Icon} from 'react-native-elements';
+import {reqLisBankAPI} from '../api/reqLisBank';
 
-const initialState = {
+const initialState: Login = {
   user: '',
   password: '',
 };
 
+interface ResponseToken {
+  token: string;
+  response: {
+    data: string | null;
+  };
+}
+
+interface Login {
+  user: '';
+  password: '';
+}
+
 export const LoginScreen = () => {
+  const [showIncorrecLogin, setShowIncorrecLogin] = useState(false);
   const {user, password, onChange} = useForm(initialState);
 
+  const login = async () => {
+    try {
+      const resp = await reqLisBankAPI.post<ResponseToken>('/token', {
+        user,
+        password,
+      });
+      await EncryptedStorage.setItem('token', resp.data.token);
+      setShowIncorrecLogin(false);
+    } catch (error) {
+      setShowIncorrecLogin(true);
+    }
+  };
+
   const handleLogin = async () => {
-    //Do something
+    Keyboard.dismiss;
+    await login();
   };
 
   return (
-    <View style={styles.screen}>
+    <ScrollView style={styles.screen}>
       <View style={styles.headerSection}>
         <Image
           style={styles.mediumLogo}
@@ -29,6 +67,17 @@ export const LoginScreen = () => {
         <Text style={styles.subtitle}>Banco oficial de la LIS </Text>
       </View>
       <View style={styles.formSection}>
+        {showIncorrecLogin ? (
+          <View style={styles.iconWithText}>
+            <Icon name="error" color="red" size={25} />
+            <Text style={{color: 'red', fontSize: 15}}>
+              {' '}
+              Usuario o contraseña no validos
+            </Text>
+          </View>
+        ) : (
+          <View></View>
+        )}
         <Text style={styles.inputLabel}>Usuario</Text>
         <TextInput
           style={[styles.input, generalStyles.bgColorInput]}
@@ -45,7 +94,7 @@ export const LoginScreen = () => {
         />
         <Button title="Iniciar sesión" onPress={handleLogin} type="secondary" />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -88,5 +137,11 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 8,
     marginBottom: 16,
+  },
+  iconWithText: {
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 });
