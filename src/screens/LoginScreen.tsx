@@ -14,6 +14,7 @@ import {Button} from '../components/UI/Button';
 import {useForm} from '../hooks/useForm';
 import {Icon} from 'react-native-elements';
 import {reqLisBankAPI} from '../api/reqLisBank';
+import {StackScreenProps} from '@react-navigation/stack';
 
 const initialState: Login = {
   user: '',
@@ -32,7 +33,9 @@ interface Login {
   password: '';
 }
 
-export const LoginScreen = () => {
+interface Props extends StackScreenProps<any, any> {}
+
+export const LoginScreen = ({navigation}: Props) => {
   const [showIncorrecLogin, setShowIncorrecLogin] = useState(false);
   const {user, password, onChange} = useForm(initialState);
 
@@ -44,6 +47,7 @@ export const LoginScreen = () => {
       });
       await EncryptedStorage.setItem('token', resp.data.token);
       setShowIncorrecLogin(false);
+      navigation.navigate('AccountsScreen');
     } catch (error) {
       setShowIncorrecLogin(true);
     }
