@@ -1,10 +1,10 @@
 import React from 'react';
-import {ScrollView, Text} from 'react-native';
+import {Text, View} from 'react-native';
 
 export const TransacttionsScreen = () => {
   return (
-    <ScrollView>
+    <View>
       <Text>Prueba</Text>
-    </ScrollView>
+    </View>
   );
 };

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   Image,
   Keyboard,
@@ -6,13 +6,12 @@ import {
   Text,
   TextInput,
   View,
-  ScrollView,
+  KeyboardAvoidingView, Platform, Alert,
 } from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {generalStyles} from '../styles/generalStyles';
 import {Button} from '../components/UI/Button';
 import {useForm} from '../hooks/useForm';
-import {Icon} from 'react-native-elements';
 import {reqLisBankAPI} from '../api/reqLisBank';
 import {StackScreenProps} from '@react-navigation/stack';
 
@@ -36,7 +35,6 @@ interface Login {
 interface Props extends StackScreenProps<any, any> {}
 
 export const LoginScreen = ({navigation}: Props) => {
-  const [showIncorrecLogin, setShowIncorrecLogin] = useState(false);
   const {user, password, onChange} = useForm(initialState);
 
   const login = async () => {
@@ -46,66 +44,65 @@ export const LoginScreen = ({navigation}: Props) => {
         password,
       });
       await EncryptedStorage.setItem('token', resp.data.token);
-      setShowIncorrecLogin(false);
-      navigation.navigate('AccountsScreen');
+      navigation.replace('BottomTabNavigation');
     } catch (error) {
-      setShowIncorrecLogin(true);
+      Alert.alert('Login incorrecto', 'Usuario o contraseña no válidos');
     }
   };
 
   const handleLogin = async () => {
-    Keyboard.dismiss;
+    Keyboard.dismiss();
     await login();
   };
 
   return (
-    <ScrollView style={styles.screen}>
-      <View style={styles.headerSection}>
-        <Image
-          style={styles.mediumLogo}
-          source={{
-            uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Logo_de_la_Universidad_Veracruzana.svg/1200px-Logo_de_la_Universidad_Veracruzana.svg.png',
-          }}
-        />
-        <Text style={styles.title}>Lis Bank</Text>
-        <Text style={styles.subtitle}>Banco oficial de la LIS </Text>
-      </View>
-      <View style={styles.formSection}>
-        {showIncorrecLogin ? (
-          <View style={styles.iconWithText}>
-            <Icon name="error" color="red" size={25} />
-            <Text style={{color: 'red', fontSize: 15}}>
-              {' '}
-              Usuario o contraseña no validos
-            </Text>
+    <>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <View style={{flex: 1}}>
+          <View style={styles.headerSection}>
+            <Image
+              style={styles.mediumLogo}
+              source={{
+                uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Logo_de_la_Universidad_Veracruzana.svg/1200px-Logo_de_la_Universidad_Veracruzana.svg.png',
+              }}
+            />
+            <Text style={styles.title}>Lis Bank</Text>
+            <Text style={styles.subtitle}>Banco oficial de la LIS </Text>
           </View>
-        ) : (
-          <View></View>
-        )}
-        <Text style={styles.inputLabel}>Usuario</Text>
-        <TextInput
-          style={[styles.input, generalStyles.bgColorInput]}
-          onChangeText={value => onChange(value, 'user')}
-          value={user}
-          keyboardType="default"
-        />
-        <Text style={styles.inputLabel}>Contraseña</Text>
-        <TextInput
-          secureTextEntry={true}
-          style={[styles.input, generalStyles.bgColorInput, {marginBottom: 36}]}
-          onChangeText={value => onChange(value, 'password')}
-          value={password}
-        />
-        <Button title="Iniciar sesión" onPress={handleLogin} type="secondary" />
-      </View>
-    </ScrollView>
+          <View style={styles.formSection}>
+            <Text style={styles.inputLabel}>Usuario</Text>
+            <TextInput
+              style={[styles.input, generalStyles.bgColorInput]}
+              onChangeText={value => onChange(value, 'user')}
+              value={user}
+              keyboardType="default"
+            />
+            <Text style={styles.inputLabel}>Contraseña</Text>
+            <TextInput
+              secureTextEntry={true}
+              style={[
+                styles.input,
+                generalStyles.bgColorInput,
+                {marginBottom: 36},
+              ]}
+              onChangeText={value => onChange(value, 'password')}
+              value={password}
+            />
+            <Button
+              title="Iniciar sesión"
+              onPress={handleLogin}
+              type="secondary"
+            />
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-  },
   headerSection: {
     flex: 2,
     justifyContent: 'center',

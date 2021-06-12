@@ -1,15 +1,22 @@
 import {StyleSheet} from 'react-native';
 
+export const colors = {
+  primaryColor: '#0c5faa',
+  secondaryColor: '#0a8d42',
+  backgroundColor: 'white',
+  inputColor: 'gainsboro',
+};
+
 export const generalStyles = StyleSheet.create({
   bgColorInput: {
-    backgroundColor: '#ccd5da',
+    backgroundColor: colors.inputColor,
   },
   primaryColor: {
     color: 'white',
-    backgroundColor: '#0c5faa',
+    backgroundColor: colors.primaryColor,
   },
   secondaryColor: {
     color: 'white',
-    backgroundColor: '#0a8d42',
-  }
+    backgroundColor: colors.secondaryColor,
+  },
 });

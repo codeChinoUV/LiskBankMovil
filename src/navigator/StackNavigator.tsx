@@ -1,15 +1,23 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {LoginScreen} from '../screens/LoginScreen';
-import {AccountsScreen} from '../screens/AccountsScreen';
+import {BottomTabNavigation} from "./BottomTabNavigation";
 
 const Stack = createStackNavigator();
 
 export const StackNavigator = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      initialRouteName="LoginScreen"
+      screenOptions={{
+        headerShown: false,
+        cardStyle: {backgroundColor: 'transparent', flex: 1},
+      }}>
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
-      <Stack.Screen name="AccountsScreen" component={AccountsScreen} />
+      <Stack.Screen
+        name="BottomTabNavigation"
+        component={BottomTabNavigation}
+      />
     </Stack.Navigator>
   );
-}
+};
