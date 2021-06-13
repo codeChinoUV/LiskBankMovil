@@ -5,6 +5,7 @@ export const colors = {
   secondaryColor: '#0a8d42',
   backgroundColor: 'white',
   inputColor: 'gainsboro',
+  cardAccountColor: '#C4C4C4',
 };
 
 export const generalStyles = StyleSheet.create({
