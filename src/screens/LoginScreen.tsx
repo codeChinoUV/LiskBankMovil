@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   Image,
   Keyboard,
@@ -6,7 +6,9 @@ import {
   Text,
   TextInput,
   View,
-  KeyboardAvoidingView, Platform, Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
 } from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {generalStyles} from '../styles/generalStyles';
@@ -14,7 +16,8 @@ import {Button} from '../components/UI/Button';
 import {useForm} from '../hooks/useForm';
 import {reqLisBankAPI} from '../api/reqLisBank';
 import {StackScreenProps} from '@react-navigation/stack';
-import {LoginResponse} from "../types/Token";
+import {LoginResponse} from '../types/Token';
+import {AuthContext} from '../context/AuthContext';
 
 const initialState: Login = {
   user: '',
@@ -30,6 +33,7 @@ interface Props extends StackScreenProps<any, any> {}
 
 export const LoginScreen = ({navigation}: Props) => {
   const {user, password, onChange} = useForm(initialState);
+  const {logIn} = useContext(AuthContext);
 
   const login = async () => {
     try {
@@ -38,9 +42,7 @@ export const LoginScreen = ({navigation}: Props) => {
         password,
       });
       await EncryptedStorage.setItem('token', resp.data.accessToken);
-      console.log(resp.data.accessToken);
-      const token = await EncryptedStorage.getItem('token');
-      console.log(token);
+      logIn(resp.data.data);
       navigation.replace('BottomTabNavigation');
     } catch (error) {
       Alert.alert('Login incorrecto', 'Usuario o contraseña no válidos');
