@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {LoginScreen} from '../screens/LoginScreen';
-import {BottomTabNavigation} from "./BottomTabNavigation";
+import {BottomTabNavigation} from './BottomTabNavigation';
 
 const Stack = createStackNavigator();
 

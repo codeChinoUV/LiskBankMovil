@@ -14,18 +14,12 @@ import {Button} from '../components/UI/Button';
 import {useForm} from '../hooks/useForm';
 import {reqLisBankAPI} from '../api/reqLisBank';
 import {StackScreenProps} from '@react-navigation/stack';
+import {LoginResponse} from "../types/Token";
 
 const initialState: Login = {
   user: '',
   password: '',
 };
-
-interface ResponseToken {
-  token: string;
-  response: {
-    data: string | null;
-  };
-}
 
 interface Login {
   user: '';
@@ -39,11 +33,14 @@ export const LoginScreen = ({navigation}: Props) => {
 
   const login = async () => {
     try {
-      const resp = await reqLisBankAPI.post<ResponseToken>('/token', {
+      const resp = await reqLisBankAPI.post<LoginResponse>('/token', {
         user,
         password,
       });
-      await EncryptedStorage.setItem('token', resp.data.token);
+      await EncryptedStorage.setItem('token', resp.data.accessToken);
+      console.log(resp.data.accessToken);
+      const token = await EncryptedStorage.getItem('token');
+      console.log(token);
       navigation.replace('BottomTabNavigation');
     } catch (error) {
       Alert.alert('Login incorrecto', 'Usuario o contraseña no válidos');
