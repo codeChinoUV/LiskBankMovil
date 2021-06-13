@@ -1,21 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {Alert, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Accounts} from '../types/Account';
 import {reqLisBankAPI} from '../api/reqLisBank';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {CardAccount} from '../components/Account/CardAccount';
-
-const initialState: Accounts = {
-  debitAccounts: [],
-  creditAccounts: [],
-};
+import {AccountContext} from '../context/AcountContext';
 
 interface ResponseAccounts {
   data: Accounts;
 }
 
 export const AccountsScreen = () => {
-  const [account, setAccounts] = useState<Accounts>(initialState);
+  const {accountState, setAccount} = useContext(AccountContext);
 
   const requestAccounts = async () => {
     const token = await EncryptedStorage.getItem('token');
@@ -30,7 +26,7 @@ export const AccountsScreen = () => {
             },
           },
         );
-        setAccounts(response.data.data);
+        setAccount(response.data.data);
       } catch (error) {
         Alert.alert(
           'Error',
@@ -48,12 +44,14 @@ export const AccountsScreen = () => {
     <View style={styles.screen}>
       <Text style={styles.title}>Cuentas</Text>
       <ScrollView>
-        {account.creditAccounts.map(ca => (
-          <CardAccount key={ca.id} {...ca} />
-        ))}
-        {account.debitAccounts.map(ca => (
-          <CardAccount key={ca.id} {...ca} />
-        ))}
+        {accountState.account &&
+          accountState.account.creditAccounts.map(ca => (
+            <CardAccount key={ca.id} {...ca} />
+          ))}
+        {accountState.account &&
+          accountState.account.debitAccounts.map(ca => (
+            <CardAccount key={ca.id} {...ca} />
+          ))}
       </ScrollView>
     </View>
   );

@@ -2,7 +2,7 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {AccountsScreen} from '../screens/AccountsScreen';
-import {TransacttionsScreen} from '../screens/TransacttionsScreen';
+import {TransactionsScreen} from '../screens/TransactionsScreen';
 import {PerfilScreen} from '../screens/PerfilScreen';
 import {colors} from '../styles/generalStyles';
 import {Platform, Text} from 'react-native';
@@ -59,7 +59,7 @@ const BottomTabNavigationIOS = () => {
       <TabIOS.Screen
         name="TransacttionsScreen"
         options={{title: 'Movimientos'}}
-        component={TransacttionsScreen}
+        component={TransactionsScreen}
       />
       <TabIOS.Screen
         name="PerfilScreen"
@@ -105,7 +105,7 @@ function BottomTabNavigationAndroid() {
       <TabAndroid.Screen
         options={{title: 'Movimientos'}}
         name="TransacttionsScreen"
-        component={TransacttionsScreen}
+        component={TransactionsScreen}
       />
       <TabAndroid.Screen name="PerfilScreen" options={{title: 'Mi perfil'}} component={PerfilScreen} />
     </TabAndroid.Navigator>
