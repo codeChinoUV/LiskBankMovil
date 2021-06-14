@@ -10,7 +10,8 @@ import {reqLisBankAPI} from '../api/reqLisBank';
 import {TransactionsResponse} from './TransactionsScreen';
 import {Transaction} from '../types/Transaction';
 import {TransactionCard} from '../components/Account/TransactionCard';
-import {AuthContext} from "../context/AuthContext";
+import {AuthContext} from '../context/AuthContext';
+import {isCreditAccount} from '../components/Account/CardAccount';
 
 const formatter = new Intl.NumberFormat('es-MX', {
   style: 'currency',
@@ -59,11 +60,14 @@ export const AccountScreen = () => {
   const handleSeeDetails = () => {};
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       <View style={styles.container}>
         <View style={styles.cardAmount}>
           <Text style={styles.amount}>
-            ${formatter.format(currentAccountDetail?.account.availableBalance)}
+            $
+            {formatter.format(
+              currentAccountDetail?.account.availableBalance as number,
+            )}
           </Text>
           <Text style={{fontWeight: '600', marginBottom: 15}}>
             Saldo disponible
@@ -97,16 +101,15 @@ export const AccountScreen = () => {
           </View>
         </View>
         <View style={styles.sectionDetails}>
-          <View style={styles.cardOption}>
-            <Text style={styles.cardOptionText}>Estado de cuenta</Text>
-          </View>
-          <View style={styles.cardOption}>
-            <Text style={styles.cardOptionText}>Resumen de adeudo</Text>
-          </View>
+          {isCreditAccount(accountState.currentAccountDetail) ? (
+            <Button buttonStyle={styles.cardOption} title="Resumen de adeudo" />
+          ) : (
+            <Button buttonStyle={styles.cardOption} title="Realizar deposito" />
+          )}
         </View>
       </View>
 
-      <View>
+      <View style={styles.transactionsSection}>
         <Text style={styles.sectionTitle}>Ultimos movimientos</Text>
         <ScrollView>
           {transactions.map(t => (
@@ -168,13 +171,12 @@ const styles = StyleSheet.create({
   sectionDetails: {
     marginVertical: 20,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
   },
   cardOption: {
-    backgroundColor: colors.cardAccountColor,
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-    width: '40%',
+    backgroundColor: colors.primaryColor,
+    width: '100%',
+    paddingVertical: 10,
     borderRadius: 16,
   },
   cardOptionText: {
@@ -185,5 +187,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 20,
     marginBottom: 15,
+  },
+  transactionsSection: {
+    flex: 1,
   },
 });

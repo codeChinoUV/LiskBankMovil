@@ -7,8 +7,8 @@ import {CreditAccount, DebitAccount} from '../../types/Account';
 import {useNavigation} from '@react-navigation/native';
 import {AccountContext} from '../../context/AcountContext';
 
-function isCreditAccount(
-  account: DebitAccount | CreditAccount,
+export function isCreditAccount(
+  account: DebitAccount | CreditAccount | null,
 ): account is CreditAccount {
   return (account as CreditAccount).maxCredit !== undefined;
 }
