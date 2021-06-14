@@ -17,6 +17,19 @@ export const authReducer = (
     case 'logout':
       return {
         isLoggedIn: false,
+        user: {
+          name: '',
+          lastName: '',
+          ine: '',
+          address: '',
+          phoneNumber: '',
+          email: '',
+          id: -1,
+          birthday: new Date(),
+          idAuthentication: -1,
+          noClient: '',
+          proofIncome: null,
+        },
       };
     default:
       return state;
