@@ -74,7 +74,7 @@ export const TransactionsScreen = () => {
         <Text style={styles.title}>Movimientos</Text>
         <ScrollView>
           {transactions.map(t => (
-            <TransactionCard key={t.id} {...t} />
+            <TransactionCard key={t.id} transaction={t} extended={true} />
           ))}
         </ScrollView>
       </View>

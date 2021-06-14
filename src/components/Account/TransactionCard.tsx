@@ -9,17 +9,25 @@ import 'moment/locale/es';
 
 const getFormattedTime = (time: Date) => {
   moment().locale('es');
-  return moment(time).format('LL');
+  return time ? moment(time).format('LL') : '';
 };
 
-export const TransactionCard = (transaction: Transaction) => {
+interface TransactionCardProp {
+  transaction: Transaction;
+  extended: Boolean;
+}
+
+export const TransactionCard = ({
+  transaction,
+  extended = true,
+}: TransactionCardProp) => {
   const formatter = new Intl.NumberFormat('es-mx', {
     style: 'currency',
     currency: 'MXN',
   });
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, extended ? styles.extended : styles.compressed]}>
       <Text style={[styles.typeAccount, styles.debitAccount]}>
         {getFormattedTime(transaction.date)}
       </Text>
@@ -40,11 +48,17 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     backgroundColor: colors.cardAccountColor,
-    borderRadius: 24,
-    marginVertical: 10,
     height: 100,
     maxHeight: 100,
     padding: 15,
+  },
+  extended: {
+    marginVertical: 10,
+    borderRadius: 24,
+  },
+  compressed: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'black',
   },
   firstSection: {
     flex: 2,

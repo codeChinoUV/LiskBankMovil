@@ -4,8 +4,8 @@ import 'intl/locale-data/jsonp/es';
 import {StyleSheet, Text, View} from 'react-native';
 import {colors} from '../../styles/generalStyles';
 import {CreditAccount, DebitAccount} from '../../types/Account';
-import {useNavigation} from "@react-navigation/native";
-import {AccountContext} from "../../context/AcountContext";
+import {useNavigation} from '@react-navigation/native';
+import {AccountContext} from '../../context/AcountContext';
 
 function isCreditAccount(
   account: DebitAccount | CreditAccount,

@@ -11,6 +11,7 @@ interface Props extends StackScreenProps<any, any> {}
 export const PerfilScreen = ({navigation}: Props) => {
   const {authState, logout} = useContext(AuthContext);
 
+  // @ts-ignore
   const {name, lastName, email, phoneNumber, address} = authState.user;
 
   const handleLogout = () => {
