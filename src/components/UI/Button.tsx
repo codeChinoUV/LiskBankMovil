@@ -13,12 +13,14 @@ interface Props {
   title: string;
   type?: 'primary' | 'secondary';
   onPress: () => void;
+  disabled: boolean;
 }
 
 export const Button = ({
   title,
   onPress,
   type = 'primary',
+  disabled = false,
 }: Props) => {
   const ios = () => {
     return (
@@ -41,6 +43,7 @@ export const Button = ({
       <View>
         <TouchableNativeFeedback
           onPress={onPress}
+          disabled={disabled}
           background={TouchableNativeFeedback.Ripple('#28425B', false, 165)}>
           <View
             style={[

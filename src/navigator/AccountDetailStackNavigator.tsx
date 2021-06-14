@@ -2,7 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {AccountScreen} from '../screens/AccountScreen';
 import {AccountDetailsScreen} from '../screens/AccountDetailsScreen';
-import {CreditDetailsScreen} from '../screens/CreditDetailsScreen';
+import {PaymentScreen} from '../screens/PaymentScreen';
 import {AccountsScreen} from '../screens/AccountsScreen';
 
 const Stack = createStackNavigator();
@@ -21,10 +21,7 @@ export const AccountStackNavigator = () => {
         name="AccountDetailsScreen"
         component={AccountDetailsScreen}
       />
-      <Stack.Screen
-        name="BottomTabNavigation"
-        component={CreditDetailsScreen}
-      />
+      <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
     </Stack.Navigator>
   );
 };
