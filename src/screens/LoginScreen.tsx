@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   Image,
   Keyboard,
@@ -33,10 +33,12 @@ interface Props extends StackScreenProps<any, any> {}
 
 export const LoginScreen = ({navigation}: Props) => {
   const {user, password, onChange} = useForm(initialState);
+  const [loading, setLoading] = useState(false);
   const {logIn} = useContext(AuthContext);
 
   const login = async () => {
     try {
+      setLoading(true);
       const resp = await reqLisBankAPI.post<LoginResponse>('/token', {
         user,
         password,
@@ -45,8 +47,10 @@ export const LoginScreen = ({navigation}: Props) => {
       logIn(resp.data.data);
       navigation.replace('BottomTabNavigation');
     } catch (error) {
+      console.log(error);
       Alert.alert('Login incorrecto', 'Usuario o contraseña no válidos');
     }
+    setLoading(false);
   };
 
   const handleLogin = async () => {
@@ -93,6 +97,7 @@ export const LoginScreen = ({navigation}: Props) => {
               title="Iniciar sesión"
               onPress={handleLogin}
               type="secondary"
+              disabled={loading}
             />
           </View>
         </View>
