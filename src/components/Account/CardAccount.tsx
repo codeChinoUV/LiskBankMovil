@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import 'intl';
 import 'intl/locale-data/jsonp/es';
 import {StyleSheet, Text, View} from 'react-native';
 import {colors} from '../../styles/generalStyles';
 import {CreditAccount, DebitAccount} from '../../types/Account';
+import {useNavigation} from "@react-navigation/native";
+import {AccountContext} from "../../context/AcountContext";
 
 function isCreditAccount(
   account: DebitAccount | CreditAccount,
@@ -12,8 +14,12 @@ function isCreditAccount(
 }
 
 export const CardAccount = (accountToShow: DebitAccount | CreditAccount) => {
+  const {setCurrentDetailAccount} = useContext(AccountContext);
+  const navigator = useNavigation();
+
   const handleShow = () => {
-    console.log('touch: ' + accountToShow.id);
+    setCurrentDetailAccount(accountToShow);
+    navigator.navigate('AccountScreen');
   };
 
   const formatter = new Intl.NumberFormat('es-MX', {

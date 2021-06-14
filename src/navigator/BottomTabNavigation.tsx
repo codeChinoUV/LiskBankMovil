@@ -1,12 +1,12 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import {AccountsScreen} from '../screens/AccountsScreen';
 import {TransactionsScreen} from '../screens/TransactionsScreen';
 import {PerfilScreen} from '../screens/PerfilScreen';
 import {colors} from '../styles/generalStyles';
 import {Platform, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {AccountStackNavigator} from './AccountDetailStackNavigator';
 
 const TabIOS = createBottomTabNavigator();
 const TabAndroid = createMaterialBottomTabNavigator();
@@ -37,7 +37,7 @@ const BottomTabNavigationIOS = () => {
           tabBarIcon: ({color, focused, size}) => {
             let iconName: string = '';
             switch (route.name) {
-              case 'AccountsScreen':
+              case 'AccountStackNavigator':
                 iconName = 'home-outline';
                 break;
               case 'TransacttionsScreen':
@@ -47,14 +47,14 @@ const BottomTabNavigationIOS = () => {
                 iconName = 'person-circle-outline';
                 break;
             }
-            return <Text></Text>;
+            return <Text />;
           },
         };
       }}>
       <TabIOS.Screen
-        name="AccountsScreen"
+        name="AccountStackNavigator"
         options={{title: 'Mis Cuentas'}}
-        component={AccountsScreen}
+        component={AccountStackNavigator}
       />
       <TabIOS.Screen
         name="TransacttionsScreen"
@@ -83,7 +83,7 @@ function BottomTabNavigationAndroid() {
           tabBarIcon: ({color, focused}) => {
             let iconName: string = '';
             switch (route.name) {
-              case 'AccountsScreen':
+              case 'AccountStackNavigator':
                 iconName = 'home-outline';
                 break;
               case 'TransacttionsScreen':
@@ -101,13 +101,21 @@ function BottomTabNavigationAndroid() {
           },
         };
       }}>
-      <TabAndroid.Screen name="AccountsScreen" options={{title: 'Mis cuentas'}} component={AccountsScreen} />
+      <TabAndroid.Screen
+        name="AccountStackNavigator"
+        options={{title: 'Mis cuentas'}}
+        component={AccountStackNavigator}
+      />
       <TabAndroid.Screen
         options={{title: 'Movimientos'}}
         name="TransacttionsScreen"
         component={TransactionsScreen}
       />
-      <TabAndroid.Screen name="PerfilScreen" options={{title: 'Mi perfil'}} component={PerfilScreen} />
+      <TabAndroid.Screen
+        name="PerfilScreen"
+        options={{title: 'Mi perfil'}}
+        component={PerfilScreen}
+      />
     </TabAndroid.Navigator>
   );
 }
