@@ -12,6 +12,7 @@ import {Transaction} from '../types/Transaction';
 import {TransactionCard} from '../components/Account/TransactionCard';
 import {AuthContext} from '../context/AuthContext';
 import {isCreditAccount} from '../components/Account/CardAccount';
+import {useNavigation} from '@react-navigation/native';
 
 const formatter = new Intl.NumberFormat('es-MX', {
   style: 'currency',
@@ -21,6 +22,7 @@ const formatter = new Intl.NumberFormat('es-MX', {
 export const AccountScreen = () => {
   const {accountState} = useContext(AccountContext);
   const {authState} = useContext(AuthContext);
+  const navigator = useNavigation();
   const {currentAccountDetail} = accountState;
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -57,7 +59,19 @@ export const AccountScreen = () => {
     }
   }, []);
 
-  const handleSeeDetails = () => {};
+  const handleSeeDetails = () => {
+    navigator.navigate('AccountDetailsScreen');
+  };
+
+  const handleAdeudo = () => {
+    navigator.navigate('PaymentScreen');
+  };
+
+  const getLasDigitsCard = (cardNumber: string | undefined): string => {
+    return cardNumber
+      ? cardNumber.slice(cardNumber.length - 5, cardNumber.length - 1)
+      : '';
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -82,16 +96,23 @@ export const AccountScreen = () => {
         <View style={styles.cardCard}>
           <View>
             <Text>Numero de tarjeta</Text>
-            <Text style={styles.fontWeight}>#### #### #### {'1356'}</Text>
+            <Text style={styles.fontWeight}>
+              #### #### ####{' '}
+              {getLasDigitsCard(currentAccountDetail?.account.card.number)}
+            </Text>
           </View>
           <View style={styles.cardDateAndCVVDetails}>
             <View style={styles.elementDetailCard}>
               <Text>Fecha </Text>
-              <Text style={styles.fontWeight}> 12/26</Text>
+              <Text style={styles.fontWeight}>
+                {currentAccountDetail?.account.card.dueDate}
+              </Text>
             </View>
             <View style={styles.elementDetailCard}>
               <Text>CVV </Text>
-              <Text style={styles.fontWeight}> 565</Text>
+              <Text style={styles.fontWeight}>
+                {currentAccountDetail?.account.card.cvv}
+              </Text>
             </View>
           </View>
           <View>
@@ -102,9 +123,16 @@ export const AccountScreen = () => {
         </View>
         <View style={styles.sectionDetails}>
           {isCreditAccount(accountState.currentAccountDetail) ? (
-            <Button buttonStyle={styles.cardOption} title="Resumen de adeudo" />
+            <Button
+              buttonStyle={styles.cardOption}
+              title="Resumen de adeudo"
+              onPress={handleAdeudo}
+            />
           ) : (
-            <Button buttonStyle={styles.cardOption} title="Realizar deposito" />
+            <Button
+              buttonStyle={styles.cardOption}
+              title="Realizar transaferencia"
+            />
           )}
         </View>
       </View>
