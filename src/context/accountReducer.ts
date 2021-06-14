@@ -1,10 +1,11 @@
 import {AccountState} from './AcountContext';
-import {Accounts} from '../types/Account';
+import {Accounts, CreditAccount, DebitAccount} from '../types/Account';
 import {Transaction} from '../types/Transaction';
 
 type AccountAction =
   | {type: 'setAccount'; payload: Accounts}
   | {type: 'setTransactions'; payload: Transaction[]}
+  | {type: 'setCurrentDetailAccount'; payload: CreditAccount | DebitAccount}
   | {type: 'clearData'};
 
 export const accountReducer = (
@@ -23,10 +24,16 @@ export const accountReducer = (
         ...state,
         transactions: action.payload,
       };
+    case 'setCurrentDetailAccount':
+      return {
+        ...state,
+        currentAccountDetail: action.payload,
+      };
     case 'clearData':
       return {
         account: null,
         transactions: [],
+        currentAccountDetail: null,
       };
     default:
       return state;
