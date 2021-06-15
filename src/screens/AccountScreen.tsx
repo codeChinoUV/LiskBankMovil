@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import 'intl';
 import 'intl/locale-data/jsonp/es';
 import {Alert, ScrollView, StyleSheet, Text, View} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import {AccountContext} from '../context/AcountContext';
 import {Button} from 'react-native-elements';
 import {colors} from '../styles/generalStyles';
@@ -93,23 +94,33 @@ export const AccountScreen = () => {
             titleStyle={styles.buttonTitle}
           />
         </View>
-        <View style={styles.cardCard}>
+        <LinearGradient
+          style={styles.cardCard}
+          colors={
+            isCreditAccount(currentAccountDetail)
+              ? ['#12a350', '#10bd5d', '#4fbd7d']
+              : ['#1273cd', '#227cce', '#4a84ba']
+          }
+          start={{x: 0.1, y: 0.3}}>
           <View>
-            <Text>Numero de tarjeta</Text>
-            <Text style={styles.fontWeight}>
+            <Text style={styles.titleCard}>LisBank</Text>
+            <Text style={styles.typeTarjet}>
+              {isCreditAccount(currentAccountDetail) ? 'Credito' : 'Debito'}
+            </Text>
+            <Text style={styles.cardNumber}>
               #### #### ####{' '}
               {getLasDigitsCard(currentAccountDetail?.account.card.number)}
             </Text>
           </View>
           <View style={styles.cardDateAndCVVDetails}>
             <View style={styles.elementDetailCard}>
-              <Text>Fecha </Text>
+              <Text style={{color: 'white'}}>Fecha </Text>
               <Text style={styles.fontWeight}>
                 {currentAccountDetail?.account.card.dueDate}
               </Text>
             </View>
             <View style={styles.elementDetailCard}>
-              <Text>CVV </Text>
+              <Text style={{color: 'white'}}>CVV </Text>
               <Text style={styles.fontWeight}>
                 {currentAccountDetail?.account.card.cvv}
               </Text>
@@ -120,7 +131,7 @@ export const AccountScreen = () => {
               {authState.user?.name} {authState.user?.lastName}
             </Text>
           </View>
-        </View>
+        </LinearGradient>
         <View style={styles.sectionDetails}>
           {isCreditAccount(accountState.currentAccountDetail) ? (
             <Button
@@ -175,10 +186,27 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   cardCard: {
+    justifyContent: 'flex-end',
     backgroundColor: colors.cardAccountColor,
     paddingHorizontal: 17,
     paddingVertical: 12,
     borderRadius: 16,
+    height: 175,
+  },
+  titleCard: {
+    position: 'absolute',
+    top: -60,
+    right: 10,
+    fontSize: 28,
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  typeTarjet: {
+    position: 'absolute',
+    top: -26,
+    right: 10,
+    color: 'white',
+    fontSize: 12,
   },
   cardDateAndCVVDetails: {
     marginVertical: 10,
@@ -187,14 +215,23 @@ const styles = StyleSheet.create({
   },
   elementDetailCard: {
     flexDirection: 'row',
-    marginRight: 10,
+    alignItems: 'center',
+    marginRight: 60,
+  },
+  cardNumber: {
+    fontWeight: 'bold',
+    fontSize: 22,
+    color: 'white',
   },
   fontWeight: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 18,
+    color: 'white',
   },
   clientName: {
     fontWeight: 'bold',
+    color: 'white',
+    fontSize: 15,
   },
   sectionDetails: {
     marginVertical: 20,
