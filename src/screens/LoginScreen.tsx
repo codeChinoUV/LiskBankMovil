@@ -12,12 +12,13 @@ import {
 } from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {generalStyles} from '../styles/generalStyles';
-import {Button} from '../components/UI/Button';
 import {useForm} from '../hooks/useForm';
 import {reqLisBankAPI} from '../api/reqLisBank';
 import {StackScreenProps} from '@react-navigation/stack';
 import {LoginResponse} from '../types/Token';
 import {AuthContext} from '../context/AuthContext';
+import {Background} from '../components/UI/Background';
+import {Button} from 'react-native-elements/dist/buttons/Button';
 
 const initialState: Login = {
   user: '',
@@ -47,7 +48,6 @@ export const LoginScreen = ({navigation}: Props) => {
       logIn(resp.data.data);
       navigation.replace('BottomTabNavigation');
     } catch (error) {
-      console.log(error);
       Alert.alert('Login incorrecto', 'Usuario o contraseña no válidos');
     }
     setLoading(false);
@@ -55,7 +55,9 @@ export const LoginScreen = ({navigation}: Props) => {
 
   const handleLogin = async () => {
     Keyboard.dismiss();
-    await login();
+    if (user.length > 0 && password.length) {
+      await login();
+    }
   };
 
   return (
@@ -64,6 +66,7 @@ export const LoginScreen = ({navigation}: Props) => {
         style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={{flex: 1}}>
+          <Background />
           <View style={styles.headerSection}>
             <Image
               style={styles.mediumLogo}
@@ -71,32 +74,34 @@ export const LoginScreen = ({navigation}: Props) => {
                 uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Logo_de_la_Universidad_Veracruzana.svg/1200px-Logo_de_la_Universidad_Veracruzana.svg.png',
               }}
             />
-            <Text style={styles.title}>Lis Bank</Text>
+            <Text style={styles.title}>LisBank</Text>
             <Text style={styles.subtitle}>Banco oficial de la LIS </Text>
           </View>
           <View style={styles.formSection}>
-            <Text style={styles.inputLabel}>Usuario</Text>
+            <Text style={styles.inputLabel}>Usuario:</Text>
             <TextInput
-              style={[styles.input, generalStyles.bgColorInput]}
+              style={[styles.input]}
+              placeholderTextColor="rgba(255,255,255,0.4)"
               onChangeText={value => onChange(value, 'user')}
               value={user}
-              keyboardType="default"
+              keyboardType="email-address"
+              underlineColorAndroid="white"
             />
-            <Text style={styles.inputLabel}>Contraseña</Text>
+            <Text style={styles.inputLabel}>Contraseña:</Text>
             <TextInput
               secureTextEntry={true}
-              style={[
-                styles.input,
-                generalStyles.bgColorInput,
-                {marginBottom: 36},
-              ]}
+              style={[styles.input, {marginBottom: 36}]}
+              placeholderTextColor="rgba(255,255,255,0.4)"
               onChangeText={value => onChange(value, 'password')}
               value={password}
+              keyboardType="default"
+              underlineColorAndroid="white"
             />
             <Button
               title="Iniciar sesión"
               onPress={handleLogin}
-              type="secondary"
+              buttonStyle={styles.buttonStyle}
+              titleStyle={styles.buttonText}
               disabled={loading}
             />
           </View>
@@ -126,27 +131,36 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 36,
     fontWeight: '500',
+    color: 'white',
   },
   subtitle: {
     fontSize: 18,
     marginVertical: 8,
+    color: 'white',
   },
   inputLabel: {
     fontSize: 18,
     marginVertical: 8,
+    color: 'white',
+    fontWeight: '700',
   },
   input: {
-    borderWidth: 0,
     alignSelf: 'stretch',
-    fontSize: 24,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    marginBottom: 16,
+    fontSize: 20,
+    color: 'white',
   },
   iconWithText: {
     flexWrap: 'wrap',
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
+  },
+  buttonStyle: {
+    borderWidth: 2,
+    borderColor: 'white',
+    borderRadius: 16,
+  },
+  buttonText: {
+    fontSize: 18,
   },
 });

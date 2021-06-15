@@ -48,9 +48,6 @@ export const Button = ({
           <View
             style={[
               stylesOfButton.button,
-              type === 'primary'
-                ? generalStyles.primaryColor
-                : generalStyles.secondaryColor,
             ]}>
             <Text style={stylesOfButton.buttonText}> {title} </Text>
           </View>
@@ -67,7 +64,6 @@ const stylesOfButton = StyleSheet.create({
     borderRadius: 32,
     paddingVertical: 4,
     justifyContent: 'center',
-    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 4,
@@ -76,6 +72,9 @@ const stylesOfButton = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 8,
     alignSelf: 'stretch',
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderColor: 'white',
   },
   buttonText: {
     color: 'white',
