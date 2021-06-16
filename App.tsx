@@ -1,21 +1,25 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
+import 'react-native-gesture-handler';
 import React from 'react';
-import {Text, View} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {StackNavigator} from './src/navigator/StackNavigator';
+import {AuthProvider} from './src/context/AuthContext';
+import {AccountProvider} from './src/context/AcountContext';
 
-const App = () => {
+function App() {
   return (
-    <View>
-      <Text>Hola Mundo</Text>
-    </View>
+    <NavigationContainer>
+      <AppState>
+        <StackNavigator />
+      </AppState>
+    </NavigationContainer>
+  );
+}
+
+const AppState = ({children}: any) => {
+  return (
+    <AuthProvider>
+      <AccountProvider>{children}</AccountProvider>
+    </AuthProvider>
   );
 };
 
